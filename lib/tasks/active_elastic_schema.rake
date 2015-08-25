@@ -17,7 +17,7 @@ namespace :active_elastic_schema do
 
   desc "Imports all the models in the schema"
   task migrate: :environment do
-    ActiveElastic::ElasticSchema::MODELS.each{ |model| model.import_async }
+    ActiveElastic::Config.schema_models.each{ |model| model.import_async }
   end
 
   desc "Imports data from a given model"

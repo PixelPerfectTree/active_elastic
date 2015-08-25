@@ -187,7 +187,7 @@ Imports all the models's data to ElasticSearch.
 This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 
 ### rake active_elastic:import[ModelName]
-Imports the data for a single model.
+Imports the data for a single model to ElasticSearch.
 This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 
 ## Contributing
