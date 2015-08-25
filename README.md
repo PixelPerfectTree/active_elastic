@@ -32,9 +32,9 @@ ActiveElastic is supposed to work with an ActiveRecord model.
 
 Include `ActiveElastic::Model` to ActiveRecord models to power it up!.
 
-  class Post < ActiveRecord::Base
-    include ActiveElastic::Model
-  end
+    class Post < ActiveRecord::Base
+      include ActiveElastic::Model
+    end
   
 Configuration
 -------------
@@ -169,15 +169,9 @@ To do this we need to define a `index_relations` method inside the model and use
     
 The indexer will call the `comments` method and serialize its result. 
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/active_elastic/fork )
+1. Fork it ( https://github.com/PixelPerfectTree/active_elastic' )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
