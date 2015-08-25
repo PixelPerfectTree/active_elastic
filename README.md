@@ -169,6 +169,27 @@ To do this we need to define a `index_relations` method inside the model and use
     
 The indexer will call the `comments` method and serialize its result. 
 
+# Importing Commands
+ActiveElastic provides some Rake tasks to manipulate schemas and import DB data to ElasticSearch.
+Mosts of this tasks uses the models defined in `ActiveElastic::Config.schema_models`.
+
+### rake active_elastic:create_schmea
+Create the models schema for ElasticSearch
+
+### rake active_elastic:drop_schema
+Drop all the ElasticSearch schemas.
+
+### rake active_elastic:force_create
+Will drop and then create all the model schemas.
+
+### rake active_elastic:migrate
+Imports all the models's data to ElasticSearch.
+This job uses Sidekiq's `elatic_model_importer` queue for background Job.
+
+### rake active_elastic:import[ModelName]
+Imports the data for a single model.
+This job uses Sidekiq's `elatic_model_importer` queue for background Job.
+
 ## Contributing
 
 1. Fork it ( https://github.com/PixelPerfectTree/active_elastic' )
