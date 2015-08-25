@@ -12,4 +12,4 @@ require "active_elastic/record_not_found.rb"
 require "active_elastic/version.rb"
 require "active_elastic/workers/importer.rb"
 require "active_elastic/workers/indexer.rb"
-require "active_elastic/railtie" if defined?(Rails)
+require "active_elastic/railtie" if defined?(Rails.version)

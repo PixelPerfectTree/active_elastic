@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'elasticsearch-model'
   spec.add_dependency 'elasticsearch-rails'
   spec.add_dependency 'elasticsearch-persistence'
+  spec.add_dependency 'sidekiq'
 
   spec.add_development_dependency "activemodel", "~> 4"
   spec.add_development_dependency "activesupport", "~> 4"

@@ -1,3 +1,5 @@
+require 'sidekiq'
+
 module ActiveElastic
   module Workers
     class Indexer
