@@ -1,3 +1,6 @@
+require 'elasticsearch/model'
+require 'elasticsearch/persistence'
+
 require "active_elastic/scopable.rb"
 require "active_elastic/query/query_methods.rb"
 require "active_elastic/query/builder.rb"
@@ -12,4 +15,4 @@ require "active_elastic/record_not_found.rb"
 require "active_elastic/version.rb"
 require "active_elastic/workers/importer.rb"
 require "active_elastic/workers/indexer.rb"
-require "active_elastic/railtie" if defined?(Rails.version)
+require "active_elastic/railtie.rb" if defined?(Rails.version)
