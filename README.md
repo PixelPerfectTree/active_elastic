@@ -190,6 +190,52 @@ This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 Imports the data for a single model to ElasticSearch.
 This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 
+### rake active_elastic:import_now[ModelName]
+Imports the data for a single model to ElasticSearch without using a background job.
+
+## Testing with ActiveElastic
+
+### Using a record cleaner for ElasticSearch.
+You can use this helper module for Rspec to reset ElasticSearch for each test.
+    
+    # spec/support/elastic_helper.rb
+    module ElasticHelper
+      def elastic_cleanable
+        before :each do
+          ActiveElastic::ElasticSchema.force_create
+        end
+      end
+    end
+
+Usage:
+
+    ### spec/rails_helper.rb
+    ....
+    RSpec.configure do |config|
+      config.extend ElasticHelper
+    ...
+    
+    ### /spec/some_spec.rb
+    describe SomeSpec do
+      elastic_cleanble
+    
+      it do 
+        ... 
+      end
+    end
+
+### Refresh ElasticSearch index when creating updting a document.
+
+Make sure to use `Model.refresh_index!` to access documents when created in test. Not using this will return nil when retreaving the created document.
+
+    ....
+    it "this is a example" do
+      FactoryGirl.create(:post)
+      Post.refresh_index! # Without this command, the next search would return an empty list of posts.
+      
+      expect(Post.elastic_find.all.total).to eq(1)
+    end
+
 ## Contributing
 
 1. Fork it ( https://github.com/PixelPerfectTree/active_elastic' )
