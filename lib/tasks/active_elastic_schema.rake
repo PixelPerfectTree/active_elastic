@@ -25,4 +25,9 @@ namespace :active_elastic_schema do
     args[:model_klass].to_s.constantize.import_async
   end
 
+  desc "Imports data from a given model"
+  task :import_now, [:model_klass]  => :environment  do |t, args|
+    ActiveElastic::ModelImporter.new(args[:model_klass].to_s.constantize).import
+  end
+
 end
