@@ -20,7 +20,7 @@ module ActiveElastic
     def index_relation(relation, exclude_relations: [])
       relation = self.send(relation)
       if relation.respond_to? :each
-        self.send(relation).each { |r| r.index_document(exclude_relations: exclude_relations) }
+        relation.each { |r| r.index_document(exclude_relations: exclude_relations) }
       else
         relation.index_document(exclude_relations: exclude_relations)
       end
