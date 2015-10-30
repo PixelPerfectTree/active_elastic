@@ -173,24 +173,24 @@ The indexer will call the `comments` method and serialize its result.
 ActiveElastic provides some Rake tasks to manipulate schemas and import DB data to ElasticSearch.
 Mosts of this tasks uses the models defined in `ActiveElastic::Config.schema_models`.
 
-### rake active_elastic:create_schmea
+### rake active_elastic_schema:create_schema
 Create the models schema for ElasticSearch
 
-### rake active_elastic:drop_schema
+### rake active_elastic_schema:drop_schema
 Drop all the ElasticSearch schemas.
 
-### rake active_elastic:force_create
+### rake active_elastic_schema:force_create
 Will drop and then create all the model schemas.
 
-### rake active_elastic:migrate
+### rake active_elastic_schema:migrate
 Imports all the models's data to ElasticSearch.
 This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 
-### rake active_elastic:import[ModelName]
+### rake active_elastic_schema:import[ModelName]
 Imports the data for a single model to ElasticSearch.
 This job uses Sidekiq's `elatic_model_importer` queue for background Job.
 
-### rake active_elastic:import_now[ModelName]
+### rake active_elastic_schema:import_now[ModelName]
 Imports the data for a single model to ElasticSearch without using a background job.
 
 ## Testing with ActiveElastic
