@@ -13,6 +13,13 @@ module ActiveElastic
 
         index_name default_index_name
       end
+
+
+     def more_like_me(fields = [], terms = {})
+        query = ActiveElastic::MoreLikeQueryBuilder.build(self, fields, terms)
+        self.class.search(query)
+      end
+
     end
 
     module ClassMethods
