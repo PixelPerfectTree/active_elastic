@@ -4,17 +4,24 @@ module ActiveElastic
 
       include ActiveElastic::Query::QueryMethods
 
-      def initialize(model, scope)
+      def initialize(model, scope, execute_default_scope=false)
         @model = model
         @scope = scope.new(self)
+        initialize_defaults
+        @scope.default_elastic_scope if execute_default_scope && @scope.respond_to?(:default_elastic_scope)
+      end
+
+      def initialize_defaults
         @query = {}
-        @filtered = {must: [], must_not: []}
+        @filtered_query = {}
+        @filtered_filter = {must: [], must_not: []}
+        @like = {}
         @order = []
-        @unscoped = false;
+        @min_score = nil
       end
 
       def unscoped
-        @unscoped = true
+        initialize_defaults
         self
       end
 
@@ -49,18 +56,51 @@ module ActiveElastic
       end
 
       def execute
-        @scope.default_elastic_scope if !@unscoped && @scope.respond_to?(:default_elastic_scope)
         model.search(build)
       end
 
+      def build_query_body
+        if @filtered_filter || @filtered_query
+          query_body = { filtered: {} }
+          query_body[:filtered][:filter] = { bool: @filtered_filter } if @filtered_filter.any?
+          query_body[:filtered][:query] = @filtered_query if @filtered_query.any?
+          query_body
+        end
+      end
+
       def build
-        query = {}
-        query_body = { filtered: { filter: { bool: @filtered } } }
-        query[:query] = query_body if query_body.any?
-        query[:sort] = @order if @order.any?
-        query[:size] = @per if @per
-        query[:from] = @offset if @offset
-        query
+        body = build_query_body
+        @query[:min_score] = @min_score if @min_score.present?
+        @query[:query] = body if body.any?
+        @query[:sort] = @order if @order.any?
+        @query[:size] = @per if @per
+        @query[:from] = @offset if @offset
+        @query
+      end
+
+      def add_query
+
+      end
+
+      def multi_match(term, fields, options = {})
+
+        if options[:order].present?
+          order(options[:order])
+        else
+          @order = []
+        end
+
+        @min_score = 1
+
+        @filtered_query[:multi_match] = {
+          query: term,
+          fields: fields,
+          minimum_should_match: "90%"
+        }
+
+        @filtered_query[:multi_match][:type] = options[:type] if options[:type].present?
+
+        self
       end
 
       def offset(value)
@@ -136,7 +176,7 @@ module ActiveElastic
 
 
       def nested_where(relation, field, value, condition = true)
-        @filtered[:must].push({nested: {
+        @filtered_filter[:must].push({nested: {
                 path: "#{relation}",
                 query: {
                     bool: {
@@ -151,7 +191,7 @@ module ActiveElastic
       end
 
       def nested_in(relation, field, value, condition = true)
-        @filtered[:must].push({nested: {
+        @filtered_filter[:must].push({nested: {
                 path: "#{relation}",
                 query: {
                     bool: {
@@ -194,7 +234,7 @@ module ActiveElastic
       end
 
       def add_condition(hash, condition)
-        @filtered[:must].push( hash ) if condition
+        @filtered_filter[:must].push( hash ) if condition
         self
       end
 
@@ -203,7 +243,7 @@ module ActiveElastic
       end
 
       def add_not_condition(hash, condition)
-        @filtered[:must_not].push( hash ) if condition
+        @filtered_filter[:must_not].push( hash ) if condition
         self
       end
 

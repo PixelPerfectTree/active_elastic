@@ -30,7 +30,7 @@ module ActiveElastic
 
     module ClassMethods
       def elastic_find
-        self.elastic_query_scope = ActiveElastic::Query::Base.new(self, self.query_scope_class)
+        self.elastic_query_scope = ActiveElastic::Query::Base.new(self, self.query_scope_class, true)
       end
 
       def elastic_scope(name, body)

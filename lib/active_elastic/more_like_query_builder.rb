@@ -1,6 +1,6 @@
 module ActiveElastic
   class MoreLikeQueryBuilder
-    def self.build(model, fields, terms)
+    def self.build(model, fields, terms, min_term_freq=1, max_query_terms=12)
       query  = {
           query: {
             filtered: {
@@ -13,8 +13,8 @@ module ActiveElastic
                                 _id: model.id
                             }
                         ],
-                        min_term_freq: 1,
-                        max_query_terms: 12
+                        min_term_freq: min_term_freq,
+                        max_query_terms: max_query_terms
                     }
                 },
             }
