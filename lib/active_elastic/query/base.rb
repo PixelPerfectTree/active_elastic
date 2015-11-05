@@ -38,7 +38,7 @@ module ActiveElastic
       end
 
       def filter_using(filters)
-        filters.compact.each { |filter| self.send(filter.first, filter.last) }
+        filters.compact.each { |filter| self.send(filter.first, filter.last) if filter.last.present? }
         self
       end
 
@@ -83,14 +83,13 @@ module ActiveElastic
       end
 
       def multi_match(term, fields, options = {})
-
         if options[:order].present?
           order(options[:order])
         else
           @order = []
         end
 
-        @min_score = 1
+        @min_score = options[:min_score] || 1
 
         @filtered_query[:multi_match] = {
           query: term,
