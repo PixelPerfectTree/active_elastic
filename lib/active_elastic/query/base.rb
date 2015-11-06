@@ -25,6 +25,29 @@ module ActiveElastic
         self
       end
 
+      def related(model, fields, options = {})
+        options[:min_term_freq] ||= 1
+        options[:max_query_terms] ||= 12
+
+        @min_score = options[:min_score] || 4
+        @filtered_query = {
+          more_like_this: {
+                docs: [
+                    {
+                        _index: model.class.index_name,
+                        _type: model.class.to_s.downcase,
+                        _id: model.id
+                    }
+                ],
+                fields: fields,
+                min_term_freq: options[:min_term_freq],
+                max_query_terms: options[:max_query_terms]
+            }
+        }
+
+        self
+      end
+
       def find(id)
         find_by(:id, id)
       end
