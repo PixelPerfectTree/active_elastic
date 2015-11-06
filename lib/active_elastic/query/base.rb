@@ -82,6 +82,18 @@ module ActiveElastic
         model.search(build)
       end
 
+      def filter(string)
+        string = string.to_s
+        must_queries = ActiveElastic::FilterParser.new(string).must_queries
+        must_not_queries = ActiveElastic::FilterParser.new(string).must_not_queries
+
+        @filtered_filter[:must].concat must_queries
+        @filtered_filter[:must_not].concat must_not_queries
+
+        self
+      end
+
+
       def build_query_body
         if @filtered_filter || @filtered_query
           query_body = { filtered: {} }
